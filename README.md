@@ -33,41 +33,66 @@ Approach we followed:
 ## Description of the Repository
 
 Our code is mainly divided into two packages: 
-`Graph` and `Runtime` found under the `/src` folder.
+`Graph` and `Runtime` found under the **/src** folder.
 
 `Graph`: contains the utility functions for defining the abstract syntax tree using Python
 
 `Runtime`: contains  functionalities such as: 
 
-    1. graphbuilder.py: builds graph for feature computation into sets
+   1. `graphbuilder.py`: builds graph for feature computation into sets
     
-    2. timer.py:  takes care of all the time calculation
+   2. `timer.py`:  takes care of all the time calculation
     
-    3. cascade_construct.py: constructs cascades and holds the cutoffs and calculate feature perf.
+   3. `cascade_construct.py`: constructs cascades and holds the cutoffs and calculate feature perf.
     
-    4. cascadepredict.py:  predicts the cascades and calculates the indices of approximation and combines prediction
+   4. `cascadepredict.py`:  predicts the cascades and calculates the indices of approximation and combines prediction
     
-    5. executor.py: has decorator functions that helps to run approximated models.
+   5. `executor.py`: has decorator functions that helps to run approximated models.
     
     
-The `/preprocess_scripts` folder consists of:
+The **/preprocess_scripts** folder consists of:
 
-    1. `/benchmark_ex` folder where we define the training and testing pipelines.
+   1. `benchmark_ex` folder where we define the training and testing pipelines.
     
-    2. `/data` folder which contains our preprocessed data stored in .csv format. The dataset we employed for this project is the ![alt text](https://www.kaggle.com/c/kkbox-music-recommendation-challenge)
+   2. `data folder` which contains our preprocessed data stored in .csv format. We employed the [WSDM: KKBox's Music Recommendation Challenge](https://www.kaggle.com/c/kkbox-music-recommendation-challenge) dataset for this project. 
     
-The `/notebooks` folder consists of the following .ipynb notebooks:
+The **/notebooks** folder consists of the following .ipynb notebooks:
 
-    1. `catboost_music.ipynb`: 
-    
-    2. `lightgbm_music.ipynb`:
-    
-    3. `music_recommendation_Performance.ipynb`: 
-    
-    4. `music_recommendation_feature_analysis.ipynb`: 
-
+   1. `music_recommendation_feature_analysis.ipynb`: To perform exploratory data analysis on the dataset.
+  
+   2. `music_recommendation_Performance.ipynb`: To run 7 different Machine Learning and Deep Learning algorithms on the dataset and comparing their accuracies.
+   
+   3. `catboost_music.ipynb`: To run our optimization algorithm on CatBoostClassifier.
+   
+   4. `lightgbm_music.ipynb`: To run our optimization algorithm on LightGBMClassifier.
+  
 
 ## Commands to execute the code
 
+To start the Redis instance, follow these commands:
+
+1. `docker pull redis`
+2. `docker run --name myredis -d redis`
+
+
 ## Results
 
+The following graph shows the associations between the different features in our dataset. The squares represent categorical associations while the circles represent the numerical associations. 
+![associations](/images/associations.png?raw=true)
+
+
+Firstly, we ran 7 different algorithms to compare the performances of these classifiers:
+![7_models](/images/7_models.png?raw=true)
+
+
+Since CatBoost and LightGBM give us the maximum accuracy, we decided to run our optimization algorithms on these two classifiers.
+
+
+Comparison between drawing inferences normally VS when using cascading techniques:
+CatBoostClassifier             |  LightGBMClassifier
+:-------------------------:|:-------------------------:
+![catboost](/images/catboost_results.png?raw=true)  |  ![lightgbm](/images/lightgbm_results.png?raw=true)
+There is a Projected speed up of: 2.680 in case of CatBoost  | There is a Projected speed up of: 2.983 in case of LightGBM
+Inference Time reduces from 10.92 sec to 4.17 sec | Inference Time reduces from 11.17 sec to 3.99 sec
+AUC score increases from 0.71 to 0.75 | AUC score increases from 0.74 to 0.75
+ 
